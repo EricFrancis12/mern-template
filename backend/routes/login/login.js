@@ -7,7 +7,7 @@ const useBody = require('../../middleware/format/useBody');
 
 
 
-router.post('/', (req, res, next) => useBody(req, res, next, ['email', 'password']), async (req, res) => {
+router.post('/', (req, res, next) => useBody(req, res, next, ['email', 'password']), async (req, res) => {    
     let user = await User.findOne({ email: req.body.email })
         .catch(err => {
             console.error(err);

@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+    console.log('Dashboard');
+
     const { currentUser, logout } = useAuth();
 
     const [error, setError] = useState('');
@@ -16,7 +18,7 @@ export default function Dashboard() {
             await logout();
             navigate('/login');
         } catch (err) {
-            setError('Failed to log out');
+            setError(err.message || 'Failed to log out');
         }
     }
 

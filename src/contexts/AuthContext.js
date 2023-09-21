@@ -8,7 +8,9 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-    const [loading, setLoading] = useState(true);
+    console.log('AuthProvider');
+
+    const [loading, setLoading] = useState(false);
     const [loggedIn, setLoggedIn] = useState(Cookies.get('loggedIn') === 'true' ? true : false);
 
     function handleAuthEvent(data) {
@@ -28,41 +30,49 @@ export function AuthProvider({ children }) {
 
         const { email, password } = args;
 
-        return fetch(url, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method,
-            body: JSON.stringify({
-                email,
-                password
-            })
-        })
-            .then(res => res.json())
-            .then(data => handleAuthEvent(data));
+        return await new Promise((resolve, reject) => {
+            fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method,
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }).then(async (res) => {
+                const data = await res.json();
+                handleAuthEvent(data);
+
+                if (data.success === false) {
+                    reject(data);
+                }
+                resolve(data);
+            }).catch(err => reject(err));
+        });
     }
 
-    function signup(email, password) {
-        return pingServer('/signup', { email, password });
+    async function signup(email, password) {
+        return await pingServer('/signup', { email, password });
     }
 
-    function login(email, password) {
-        return pingServer('/login', { email, password });
+    async function login(email, password) {
+        return await pingServer('/login', { email, password });
     }
 
-    function logout() {
+    async function logout() {
         const prom = pingServer('/logout', {});
         Cookies.remove('loggedIn');
         setLoggedIn(false);
-        return prom;
+        return await prom;
     }
 
-    function resetPassword(email) {
-        return pingServer('/password/reset', { email });
+    async function resetPassword(email) {
+        return await pingServer('/password/reset', { email });
     }
 
-    function changePassword() {
-        return pingServer('/password/change', {});
+    async function changePassword() {
+        return await pingServer('/password/change', {});
     }
 
     const value = {

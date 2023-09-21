@@ -11,8 +11,8 @@ async function validate(req) {
 
     const query = {
         'session._id': session_id,
-        // 'session.IP': req.ip,
-        // 'session.UA': req.headers['user-agent'],
+        'session.IP': req.ip,
+        'session.UA': req.headers['user-agent'],
     };
 
     let user;

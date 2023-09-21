@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
+    console.log('Login');
+
     const { login } = useAuth();
 
     const emailRef = useRef();
@@ -22,7 +24,7 @@ export default function Login() {
             await login(emailRef.current.value, passwordRef.current.value);
             navigate('/');
         } catch (err) {
-            setError('Failed to sign in');
+            setError(err.message || 'Failed to sign in');
         }
 
         setLoading(false);

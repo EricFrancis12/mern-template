@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function UpdateProfile() {
+    console.log('UpdateProfile');
+
     const { changePassword } = useAuth();
 
     const passwordRef = useRef();
@@ -11,7 +13,7 @@ export default function UpdateProfile() {
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [userClient, setUserClient] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,10 +23,10 @@ export default function UpdateProfile() {
         fetch('/user')
             .then(res => res.json())
             .then(data => {
-                setCurrentUser(data.user);
+                setUserClient(data.user);
             })
             .catch(err => {
-                setError('Failed to fetch current user');
+                setError(err.message || 'Failed to fetch current user');
             })
             .finally(() => {
                 setLoading(false);
@@ -79,7 +81,7 @@ export default function UpdateProfile() {
                 <Link to='/'>Cancel</Link>
             </div>
             <div>
-                {JSON.stringify(currentUser)}
+                {JSON.stringify(userClient)}
             </div>
         </>
     )

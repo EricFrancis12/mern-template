@@ -3,7 +3,9 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 
-export default function ForgotPassword() {
+export default function ResetPassword() {
+    console.log('ResetPassword');
+
     const { resetPassword } = useAuth();
 
     const emailRef = useRef();
@@ -22,7 +24,7 @@ export default function ForgotPassword() {
             await resetPassword(emailRef.current.value);
             setMessage('Check your inbox for further instructions');
         } catch (err) {
-            setError('Failed to reset password');
+            setError(err.message || 'Failed to reset password');
         }
 
         setLoading(false);

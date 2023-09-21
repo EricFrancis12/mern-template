@@ -7,12 +7,8 @@ const cookieParser = require('cookie-parser');
 
 const express = require('express');
 const app = express();
-app.set('view engine', 'ejs');
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
-app.use(express.static('public'));
-app.use(express.static('app/public'));
-app.use(express.static('app/build'));
 app.use(express.urlencoded({ extended: true }));
 
 const mongoose = require('mongoose');
@@ -22,18 +18,16 @@ mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_LOCAL)
 
 
 
+app.use(express.static(path.resolve(__dirname, './build')));
+
 const routes = fs.readdirSync(path.resolve(__dirname, './backend/routes'));
 routes.forEach(route => {
     const router = require(`./backend/routes/${route}/${route}`);
     app.use(`/${route}`, router);
 });
 
-app.get('/', (req, res) => {
-    res.status(200).sendFile('./build/index.html', { root: './' });
-});
-
-app.get('/*', (req, res) => {
-    res.status(200).sendFile('./build/index.html', { root: './' });
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './build', 'index.html'));
 });
 
 
