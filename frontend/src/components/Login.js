@@ -20,7 +20,7 @@ export default function Login() {
             setError('');
             setLoading(true);
             await login(emailRef.current.value, passwordRef.current.value);
-            navigate('/');
+            navigate('/app');
         } catch (err) {
             setError(err.message || 'Failed to sign in');
         }

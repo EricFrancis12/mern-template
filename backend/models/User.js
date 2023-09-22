@@ -180,7 +180,7 @@ UserSchema.methods.setNewPassword = async function (hashedPassword, res) {
         throw new Error('Encountered error setting new password.');
     }
 
-    res.clearCookie('resetPasswordAuthStr');
+    if (res) res.clearCookie('resetPasswordAuthStr');
 }
 
 UserSchema.methods.authenticate = async function (req) {

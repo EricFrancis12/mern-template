@@ -17,14 +17,14 @@ export default function EnterNewPassword() {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+        if (passwordRef.current.value !== passwordConfirmRef.current.value || passwordRef.current.value === '') {
             return setError('Passwords do not match');
         }
 
         try {
-            setMessage('');
             setError('');
             setLoading(true);
+            setMessage('');
             await setNewPassword(passwordRef.current.value, passwordConfirmRef.current.value);
             setMessage('New password set. Redirecting to login...');
             setTimeout(() => {

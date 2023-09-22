@@ -11,6 +11,7 @@ import ResetPassword from './components/ResetPassword';
 import ResetPasswordAuth from './components/ResetPasswordAuth';
 import EnterNewPassword from './components/EnterNewPassword';
 import NotFound from './components/NotFound';
+import Home from './components/Home';
 
 function App() {
     return (
@@ -20,8 +21,11 @@ function App() {
                     <Router>
                         <AuthProvider>
                             <Routes>
-                                <Route path='/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                                <Route path='/update-profile' element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
+                                <Route path='/' element={<Home />} />
+                                <Route path='/app'>
+                                    <Route path='' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                                    <Route path='update-profile' element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
+                                </Route>
                                 <Route path='/register'>
                                     <Route path='' element={<Register />} />
                                     <Route path='auth/:emailAuthStr' element={<RegisterAuth />} />
