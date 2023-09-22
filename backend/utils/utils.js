@@ -1,6 +1,10 @@
 
 
-const rootUrl = `${process.env.PROTOCOL__ || 'http://'}${process.env.DOMAIN || `localhost:${process.env.PORT}`}`;
+const frontendHost = `${process.env.DOMAIN || `localhost:${process.env.FRONTEND_PORT || process.env.PORT}`}`;
+const frontendRootUrl = `${process.env.PROTOCOL__ || 'http://'}${frontendHost}`;
+
+const backendHost = `${process.env.DOMAIN || `localhost:${process.env.PORT}`}`;
+const backendRootUrl = `${process.env.PROTOCOL__ || 'http://'}${backendHost}`;
 
 function isNil(any) {
     return any === undefined || any === null;
@@ -37,7 +41,10 @@ function formatDate(timestamp = Date.now()) {
 
 
 module.exports = {
-    rootUrl,
+    frontendHost,
+    frontendRootUrl,
+    backendHost,
+    backendRootUrl,
     isNil,
     isEmpty,
     isObject,

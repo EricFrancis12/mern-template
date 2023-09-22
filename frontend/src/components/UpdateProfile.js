@@ -1,37 +1,17 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function UpdateProfile() {
-    console.log('UpdateProfile');
-
-    const { changePassword } = useAuth();
+    const { changePassword, setUserClient } = useAuth();
 
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const [userClient, setUserClient] = useState(null);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        setLoading(true);
-        setError('');
-
-        fetch('/user')
-            .then(res => res.json())
-            .then(data => {
-                setUserClient(data.user);
-            })
-            .catch(err => {
-                setError(err.message || 'Failed to fetch current user');
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -78,10 +58,7 @@ export default function UpdateProfile() {
                 </Card.Body>
             </Card>
             <div className='w-100 text-center mt-2'>
-                <Link to='/'>Cancel</Link>
-            </div>
-            <div>
-                {JSON.stringify(userClient)}
+            <Link to='/'>Cancel</Link>
             </div>
         </>
     )

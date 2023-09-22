@@ -4,8 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Signup() {
-    console.log('Signup');
-
     const { signup } = useAuth();
 
     const emailRef = useRef();
@@ -24,7 +22,7 @@ export default function Signup() {
         }
 
         try {
-            setError();
+            setError('');
             setLoading(true);
             await signup(emailRef.current.value, passwordRef.current.value);
             navigate('/');

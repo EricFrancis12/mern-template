@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Alert } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
-    console.log('Dashboard');
-
-    const { currentUser, logout } = useAuth();
+    const { logout, userClient, fetchUserClient } = useAuth();
 
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     async function handleLogout() {
@@ -28,7 +27,7 @@ export default function Dashboard() {
                 <Card.Body>
                     <h2 className='text-center mb-4'>Profile</h2>
                     {error && <Alert variant='danger'>{error}</Alert>}
-                    <strong>Email:</strong> {currentUser.email}
+                    <strong>Email:</strong> {userClient?.email}
                     <Link to='/update-profile' className='btn btn-primary w-100 mt-3'>Update Profile</Link>
                 </Card.Body>
             </Card>

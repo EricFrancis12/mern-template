@@ -8,7 +8,7 @@ const hash = 10;
 
 const mongoose = require('mongoose');
 
-const { rootUrl } = require('../utils/utils');
+const { frontendRootUrl } = require('../utils/utils');
 
 
 
@@ -22,8 +22,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    emailAuthStr: String,
-    resetPasswordAuthStr: String,
+    emailAuthStr: {
+        type: String,
+        default: ''
+    },
+    resetPasswordAuthStr: {
+        type: String,
+        default: ''
+    },
     emailVerified: {
         type: Boolean,
         default: false
@@ -62,7 +68,7 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods.register = async function () {
     const emailAuthStr = crypto.randomUUID();
-    const emailAuthLink = `${rootUrl}/signup/auth/${emailAuthStr}`;
+    const emailAuthLink = `${frontendRootUrl}/signup/auth/${emailAuthStr}`;
 
     this.emailAuthStr = emailAuthStr;
 
@@ -119,17 +125,16 @@ UserSchema.methods.activateAccount = async function () {
     }
 }
 
-UserSchema.methods.resetPassword = async function () {
+UserSchema.methods.initResetPassword = async function () {
     const resetPasswordAuthStr = crypto.randomUUID();
-    const resetPasswordAuthLink = `${rootUrl}/password/reset/auth/${resetPasswordAuthStr}`;
+    const resetPasswordAuthLink = `${frontendRootUrl}/password/reset/auth/${resetPasswordAuthStr}`;
 
     this.resetPasswordAuthStr = resetPasswordAuthStr;
 
     try {
         await this.save();
     } catch (err) {
-        console.error('error occurred: ', err);
-        return res.status(500).json({ success: false, message: 'Encountered error generating reset link. Please try again later.' });
+        throw new Error('Encountered error generating reset link. Please try again later.');
     }
 
     try {
@@ -138,14 +143,32 @@ UserSchema.methods.resetPassword = async function () {
             'sender': { 'email': 'api@sendinblue.com', 'name': process.env.APP_NAME || 'Support' },
             'replyTo': { 'email': 'api@sendinblue.com', 'name': process.env.APP_NAME || 'Support' },
             'to': [{ 'name': this.email, 'email': this.email }],
-            'htmlContent': `<html><body><p>A password reset was initialized for your account. If you recognize this attempt, please click here to reset your password: <a href="${resetPasswordAuthLink}">${resetPasswordAuthLink}</a></p></body></html>`
+            'htmlContent': `<html><body><p>A password reset was initialized for your account. If you recognize this attempt, please click this link to reset your password (NOTE: This link will expire in 10 minutes): <a href="${resetPasswordAuthLink}">${resetPasswordAuthLink}</a></p></body></html>`
         });
     } catch (err) {
-        throw new Error('Encountered error sending email to user');
+        throw new Error('Encountered error sending email to user.');
     }
 }
 
-UserSchema.methods.setNewPassword = async function (hashedPassword) {
+UserSchema.methods.setResetPasswordCookie = async function (res) {
+    const resetPasswordAuthStr = crypto.randomUUID();
+    this.resetPasswordAuthStr = resetPasswordAuthStr;
+
+    try {
+        await this.save();
+    } catch (err) {
+        throw new Error('Encountered error resetting password.');
+    }
+
+    const tenMinutes = 10 * 60 * 1000;
+    res.cookie('resetPasswordAuthStr', resetPasswordAuthStr, {
+        httpOnly: true,
+        signed: true,
+        maxAge: tenMinutes
+    });
+}
+
+UserSchema.methods.setNewPassword = async function (hashedPassword, res) {
     if (!hashedPassword) throw new Error('Invalid argument.');
 
     this.hashedPassword = hashedPassword;
@@ -156,6 +179,8 @@ UserSchema.methods.setNewPassword = async function (hashedPassword) {
     } catch (err) {
         throw new Error('Encountered error setting new password.');
     }
+
+    res.clearCookie('resetPasswordAuthStr');
 }
 
 UserSchema.methods.authenticate = async function (req) {

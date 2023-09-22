@@ -31,7 +31,7 @@ router.post('/', (req, res, next) => useBody(req, res, next, ['email', 'password
         return res.status(500).json({ success: false, message: 'Encountered login error. Please try again later.' });
     }
 
-    res.status(200).json({ success: true, setLoggedIn: true });
+    res.status(200).json({ success: true, loggedIn: true });
 });
 
 

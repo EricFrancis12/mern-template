@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_LOCAL)
 
 
 
-app.use(express.static(path.resolve(__dirname, './build')));
+app.use(express.static(path.resolve(__dirname, './frontend/build')));
 
 const routes = fs.readdirSync(path.resolve(__dirname, './backend/routes'));
 routes.forEach(route => {
@@ -27,7 +27,7 @@ routes.forEach(route => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, './build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, './frontend/build', 'index.html'));
 });
 
 
