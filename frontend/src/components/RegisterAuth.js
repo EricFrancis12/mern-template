@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap/esm';
 import { Link } from 'react-router-dom';
 
-export default function SignupAuth() {
+export default function RegisterAuth() {
     const { emailAuthStr } = useParams();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ export default function SignupAuth() {
         setError('');
         setLoading(true);
 
-        fetch('/signup/auth', {
+        fetch('/register/auth', {
             headers: {
                 'Content-Type': 'application/json'
             },

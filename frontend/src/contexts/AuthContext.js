@@ -70,8 +70,8 @@ export function AuthProvider({ children }) {
         });
     }
 
-    async function signup(email, password) {
-        return await pingServer('/signup', { email, password });
+    async function register(email, password) {
+        return await pingServer('/register', { email, password });
     }
 
     async function login(email, password) {
@@ -107,7 +107,7 @@ export function AuthProvider({ children }) {
         userClient,
         setUserClient,
         fetchUserClient,
-        signup,
+        register,
         login,
         logout,
         initResetPassword,

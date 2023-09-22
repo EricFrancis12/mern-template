@@ -3,8 +3,8 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function Signup() {
-    const { signup } = useAuth();
+export default function Register() {
+    const { register } = useAuth();
 
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -24,7 +24,7 @@ export default function Signup() {
         try {
             setError('');
             setLoading(true);
-            await signup(emailRef.current.value, passwordRef.current.value);
+            await register(emailRef.current.value, passwordRef.current.value);
             navigate('/');
         } catch (err) {
             setError(err.message || 'Failed to create an account');

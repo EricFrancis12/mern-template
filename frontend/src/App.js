@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './components/Dashboard';
 import UpdateProfile from './components/UpdateProfile';
-import Signup from './components/Signup';
-import SignupAuth from './components/SignupAuth';
+import Register from './components/Register';
+import RegisterAuth from './components/RegisterAuth';
 import Login from './components/Login';
 import ResetPassword from './components/ResetPassword';
 import ResetPasswordAuth from './components/ResetPasswordAuth';
@@ -22,9 +22,9 @@ function App() {
                             <Routes>
                                 <Route path='/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
                                 <Route path='/update-profile' element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
-                                <Route path='/signup'>
-                                    <Route path='' element={<Signup />} />
-                                    <Route path='auth/:emailAuthStr' element={<SignupAuth />} />
+                                <Route path='/register'>
+                                    <Route path='' element={<Register />} />
+                                    <Route path='auth/:emailAuthStr' element={<RegisterAuth />} />
                                 </Route>
                                 <Route path='/login' element={<Login />} />
                                 <Route path='/forgot-password' element={<ResetPassword />} />
