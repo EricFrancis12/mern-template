@@ -1,10 +1,10 @@
 
 
 const frontendHost = `${process.env.DOMAIN || `localhost:${process.env.FRONTEND_PORT || process.env.PORT}`}`;
-const frontendRootUrl = `${process.env.PROTOCOL__ || 'http://'}${frontendHost}`;
+const frontendRootUrl = `${process.env.PROTOCOL__ || 'https://'}${frontendHost}`;
 
 const backendHost = `${process.env.DOMAIN || `localhost:${process.env.PORT}`}`;
-const backendRootUrl = `${process.env.PROTOCOL__ || 'http://'}${backendHost}`;
+const backendRootUrl = `${process.env.PROTOCOL__ || 'https://'}${backendHost}`;
 
 function isNil(any) {
     return any === undefined || any === null;
