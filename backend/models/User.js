@@ -68,7 +68,7 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods.register = async function () {
     const emailAuthStr = crypto.randomUUID();
-    const emailAuthLink = `${frontendRootUrl}/signup/auth/${emailAuthStr}`;
+    const emailAuthLink = `${frontendRootUrl}/register/auth/${emailAuthStr}`;
 
     this.emailAuthStr = emailAuthStr;
 
